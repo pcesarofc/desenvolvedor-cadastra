@@ -1,1 +1,526 @@
 @import "reset";
+@import "colors";
+@import "typography";
+@import "mixins";
+@import "variables";
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.header {
+  @include flex(row, space-between, center);
+  @include sizes(auto, $size-64);
+  padding: $size-20 $size-32;
+  border-bottom: $size-2 solid $color-gray-light;
+
+  .cart-container {
+    @include flex(row, center, center);
+    @include sizes($size-20, $size-20);
+    position: relative;
+    display: flex;
+
+    .cart-quantity {
+      @include flex(row, center, center);
+      @include sizes($size-12, $size-12);
+      @include font($text-size-0, $line-height-1, $font-regular);
+      background-color: $color-accent-orange;
+      border-radius: 100%;
+      color: $color-white;
+      position: absolute;
+      top: $size-12;
+      left: $size-12;
+    }
+  }
+}
+
+#filter-container,
+#order-container {
+  width: 100%;
+  min-height: 100vh;
+  position: absolute;
+  top: 0;
+  background-color: $color-white;
+  display: none;
+  z-index: 3;
+
+  .title {
+    @include flex(row, space-between, center);
+    padding: $size-16;
+    border-bottom: $size-1 solid $color-gray-dark;
+
+    .title-text {
+      @include font($text-size-6, $line-height-12, $font-regular);
+      text-transform: uppercase;
+      color: $color-gray-dark;
+    }
+
+    .close-button {
+      @include sizes($size-18, $size-18);
+      @include button(transparent, $color-black, none, transparent);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='20' viewBox='0 0 19 20' fill='none'%3E%3Cpath d='M0.5 18.852L17.5547 1.00001' stroke='black'/%3E%3Cline y1='-0.5' x2='25.2899' y2='-0.5' transform='matrix(0.711746 0.702437 -0.874311 0.485367 0 1.23547)' stroke='black'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+
+  .filters {
+    padding-top: $size-30;
+    padding-inline: $size-16;
+
+    &__colors,
+    &__sizes,
+    &__prices {
+      position: relative;
+      top: -10px;
+      margin-bottom: $size-30;
+
+      &.hidden {
+        display: none;
+      }
+
+      .filter-item {
+        @include flex(row, flex-start, center);
+
+        #filter-checkbox {
+          @include flex(row, center, center);
+          @include sizes($size-16, $size-16);
+          margin-right: $size-10;
+          appearance: none;
+          border: $size-1 solid $color-black-translucent;
+
+          &:checked {
+            &::after {
+              content: "";
+              @include sizes($size-10, $size-10);
+              background-color: $color-accent-orange;
+              display: block;
+            }
+          }
+        }
+
+        label {
+          @include font($text-size-2, 100%, $font-regular);
+          color: $color-black;
+        }
+      }
+    }
+
+    &__colors,
+    &__prices {
+      @include flex(column, flex-start, flex-start, $size-16);
+    }
+
+    &__sizes {
+      @include sizes(153px, 112px);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+
+      .size-item {
+        @include sizes($size-32, $size-32);
+
+        #filter-item {
+          @include sizes($size-32, $size-32);
+          position: relative;
+          cursor: pointer;
+
+          #size-checkbox {
+            @include sizes($size-32, $size-32);
+            border: $size-1 solid $color-black-translucent;
+            position: relative;
+            z-index: 2;
+            background: transparent;
+            appearance: none;
+            cursor: pointer;
+
+            &:checked {
+              border: $size-1 solid $color-accent-orange;
+            }
+          }
+
+          .label-price {
+            @include flex(row, center, center);
+            @include sizes($size-32, $size-32);
+            @include font($text-size-3, $line-height-6, $font-regular);
+            top: 0;
+            bottom: 0;
+            position: absolute;
+            z-index: 3;
+            pointer-events: none;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: $color-black-translucent;
+          }
+        }
+      }
+    }
+
+    .filter {
+      @include flex(row, space-between, center);
+      width: 100%;
+      margin-bottom: $size-30;
+      cursor: pointer;
+
+      .filter-name {
+        @include font($text-size-5, $line-height-11, $font-regular);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: $color-gray-dark;
+      }
+      .arrow {
+        @include sizes($size-18, 13px);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='15' viewBox='0 0 20 15' fill='none'%3E%3Cpath d='M1 1L10 14L19 1.0135' stroke='%23666666' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    }
+  }
+
+  .order-filter {
+    @include flex(column, flex-start, flex-start, $size-30);
+    padding-inline: $size-16;
+    margin-top: $size-30;
+
+    &__button {
+      @include font($text-size-4, $line-height-9, $font-regular);
+      @include button(transparent, $color-black, none, transparent);
+      min-height: $size-30;
+    }
+  }
+
+  .filter-buttons {
+    @include flex(row, center, center, $size-24);
+    display: none;
+
+    .apply-filter {
+      @include sizes(160px, $size-36);
+      @include font($text-size-2, $line-height-5, $font-regular);
+      @include button(
+        $color-accent-orange,
+        $color-white,
+        none,
+        $color-accent-orange
+      );
+    }
+
+    .clear-filter {
+      @include sizes(160px, $size-36);
+      @include font($text-size-2, $line-height-5, $font-regular);
+      @include button(
+        transparent,
+        $color-gray-dark,
+        $size-1 solid $color-gray-dark,
+        transparent
+      );
+    }
+  }
+}
+
+.content {
+  @include flex(column, flex-start, center);
+  padding-inline: $size-32;
+  min-height: calc(100vh - 97px);
+
+  @media (min-width: $breakpoint-md) {
+    padding-inline: $size-40;
+  }
+
+  .title-container {
+    @include flex(row, center, center);
+    margin-block: $size-24 $size-12;
+    width: 100%;
+
+    @media (min-width: $breakpoint-md) {
+      @include flex(row, space-between, center);
+    }
+
+    .title {
+      @include sizes(auto, $size-44);
+      @include font($text-size-7, $line-height-13, $font-regular);
+      color: $color-black-secondary;
+    }
+
+    .select-orders {
+      @include sizes(142px, $size-42);
+      @include font($text-size-3, $line-height-6, $font-regular);
+      padding: $size-10;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='11' viewBox='0 0 14 11' fill='none'%3E%3Cpath d='M1 1L7 10L13 1.00935' stroke='%23666666' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right $size-10 center;
+      color: $color-black;
+      display: none;
+
+      @media (min-width: $breakpoint-md) {
+        display: block;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: $color-border-orange;
+      }
+
+      .default-value {
+        display: none;
+      }
+
+      option {
+        padding: $size-8;
+
+        &[focus] {
+          background-color: $color-border-orange;
+          color: $color-white;
+        }
+
+        &[selected] {
+          background-color: $color-border-orange;
+          color: $color-white;
+        }
+      }
+    }
+  }
+
+  .filter-buttons,
+  .order-buttons {
+    @include flex(row, center, center);
+    @include sizes(100%, auto);
+    padding: 0 $size-16;
+    max-width: 343px;
+    margin-bottom: $size-36;
+
+    @media (min-width: $breakpoint-md) {
+      display: none;
+    }
+
+    &__button {
+      @include sizes(50%, 49px);
+      @include font($text-size-5, $line-height-11, $font-regular);
+      @include button(
+        $color-white,
+        $color-gray-dark,
+        $size-1 solid $color-gray-dark,
+        $color-white
+      );
+    }
+  }
+
+  .gallery-container {
+    @include flex(column, flex-start, center);
+    margin-block: 0px $size-40;
+
+    @media (min-width: $breakpoint-md) {
+      display: grid;
+      grid-template-columns: 157px 1fr;
+      width: 100%;
+      max-width: 1280px;
+      margin-inline: auto;
+      column-gap: $size-44;
+      align-items: flex-start;
+      margin-block: $size-64 $size-40;
+    }
+
+    .side-filters {
+      display: none;
+
+      @media (min-width: $breakpoint-md) {
+        @include flex(column, flex-start, flex-start, $size-24);
+      }
+
+      .desktop-filter {
+        .filter-title {
+          @include font($text-size-3, $line-height-6, $font-regular);
+          margin-bottom: $size-14;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          color: $color-black-secondary;
+        }
+
+        .expand-filters {
+          @include flex(row, center, center);
+          @include font($size-12, 100%, $font-regular);
+          margin-top: $size-16;
+          text-decoration-line: underline;
+          cursor: pointer;
+          color: $color-gray-dark;
+
+          &::after {
+            content: "";
+            @include sizes(7px, 5px);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='11' viewBox='0 0 14 11' fill='none'%3E%3Cpath d='M1 1L7 10L13 1.00935' stroke='%23666666' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-left: 5px;
+            content: "";
+            display: block;
+            background-size: cover;
+          }
+        }
+
+        &__colors,
+        &__prices {
+          @include flex(column, flex-start, flex-start, $size-16);
+
+          .filter-item {
+            @include flex(row, flex-start, center);
+
+            #filter-checkbox {
+              @include flex(row, center, center);
+              @include sizes($size-16, $size-16);
+              margin-right: $size-10;
+              appearance: none;
+              border: $size-1 solid $color-black-translucent;
+
+              &:checked {
+                &::after {
+                  content: "";
+                  @include sizes($size-10, $size-10);
+                  background-color: $color-accent-orange;
+                  display: block;
+                }
+              }
+            }
+
+            label {
+              @include font($text-size-2, 100%, $font-regular);
+              color: $color-black;
+            }
+          }
+        }
+
+        &__colors {
+          overflow: hidden;
+          height: 144px;
+        }
+
+        &__sizes {
+          @include sizes(153px, 112px);
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+
+          .size-item {
+            @include sizes($size-32, $size-32);
+
+            #filter-item {
+              @include sizes($size-32, $size-32);
+              position: relative;
+              cursor: pointer;
+
+              #size-checkbox {
+                @include sizes($size-32, $size-32);
+                border: $size-1 solid $color-black-translucent;
+                position: relative;
+                z-index: 2;
+                background: transparent;
+                appearance: none;
+                cursor: pointer;
+
+                &:checked {
+                  border: $size-1 solid $color-accent-orange;
+                }
+              }
+
+              .label-price {
+                @include flex(row, center, center);
+                @include sizes($size-32, $size-32);
+                @include font($text-size-3, $line-height-6, $font-regular);
+                top: 0;
+                bottom: 0;
+                position: absolute;
+                z-index: 3;
+                pointer-events: none;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+                color: $color-black-translucent;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .product-list {
+      @include sizes(100%, auto);
+      padding-inline: $size-16;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(160px, 195px));
+      column-gap: $size-20;
+      row-gap: $size-40;
+      justify-content: center;
+      margin-bottom: $size-40;
+
+      @media (min-width: $breakpoint-lg) {
+        grid-template-columns: repeat(3, minmax(160px, 195px));
+        max-width: 976px;
+        column-gap: $size-64;
+      }
+
+      .product-item {
+        &__image {
+          width: 100%;
+          margin-bottom: $size-8;
+        }
+
+        &__name {
+          @include font($text-size-2, $line-height-5, $font-regular);
+          text-align: center;
+          text-transform: uppercase;
+          color: $color-black;
+          margin-bottom: $size-8;
+        }
+
+        &__price {
+          @include font($text-size-3, $line-height-6, $font-bold);
+          text-align: center;
+          color: $color-black;
+        }
+
+        &__installment {
+          @include font($text-size-3, $line-height-6, $font-regular);
+          text-align: center;
+          color: $color-gray-dark;
+          margin-bottom: $size-10;
+        }
+
+        &__button {
+          @include flex(row, center, center);
+          @include sizes(100%, $size-32);
+          @include font($text-size-2, $line-height-5, $font-bold);
+          @include button($color-black, $color-white, none, $color-black);
+          padding: 7px 49px;
+          gap: $size-10;
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    .load-more {
+      @include sizes(175px, $size-36);
+      @include font($text-size-2, $line-height-5, $font-bold);
+      @include button(
+        $color-accent-orange,
+        $color-white,
+        $size-1 solid $color-black,
+        $color-accent-orange
+      );
+      text-transform: uppercase;
+      grid-column: 2;
+      margin-inline: auto;
+    }
+  }
+}
+
+.footer {
+  @include flex(row, center, center);
+  width: 100%;
+  height: $size-34;
+  background: $color-black;
+
+  .footer-text {
+    @include font($line-height-3, $line-height-5, $font-regular);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $color-white;
+  }
+}
