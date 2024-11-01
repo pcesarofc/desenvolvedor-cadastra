@@ -20,6 +20,7 @@ const paths = {
   },
   img: {
     src: "src/img/**/*",
+    dest: 'dist/img'
   },
   html: {
     src: "src/index.html",
@@ -82,8 +83,21 @@ function html() {
   return src(paths.html.src).pipe(browserSync.stream()).pipe(dest(paths.dest));
 }
 
+async function optimizeImages() {
+  const imagemin = (await import("gulp-imagemin")).default;
+  return src(paths.img.src)
+    .pipe(
+      imagemin({
+        optimizationLevel: 7,
+        progressive: true,
+        interlaced: true,
+      })
+    )
+    .pipe(dest(paths.img.dest));
+}
+
 function img() {
-  return src(paths.img.src).pipe(dest(paths.dest + "/img"));
+  optimizeImages();
 }
 
 const build = series(clean, parallel(styles, scripts, html, img));

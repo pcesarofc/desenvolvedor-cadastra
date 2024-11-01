@@ -1,3 +1,11 @@
+# Atualização
+
+Email de contato: p.cesarofc@gmail.com
+
+Foi adicionado o imagemin, com uma função no gulp para o tratamento das imagens.
+O script "start" foi adaptado apenas para conseguir executar o projeto.
+
+
 # Venha ser um desenvolvedor da Cadastra
 
 Olá! Somos a Cadastra, uma Next-Gen Company que oferece soluções globais em marketing, tecnologia, estratégia de negócios, commerce, dados e analytics. Este desafio é voltado para o nosso Centro de Excelência (COE) de Commerce, especializado em implantação, migração, evolução e otimização de e-commerce.  Contamos com escritórios em 5 países, mas num formato de trabalho 100% home office.
